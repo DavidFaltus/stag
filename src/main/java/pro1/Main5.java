@@ -1,5 +1,10 @@
 package pro1;
 
+import com.google.gson.Gson;
+import pro1.apiDataModel.ActionsList;
+
+import java.util.stream.Collectors;
+
 public class Main5 {
 
     public static void main(String[] args) {
@@ -8,6 +13,16 @@ public class Main5 {
 
     public static String roomsSummary(String department, int year)
     {
-        return ""; // TODO 5.1: Vrať výpis učeben, které katedra v daném roce využila (seřadit abecedně, oddělit čárkou)
+        String json1 = Api.getActionsByDepartment(department, year);
+        ActionsList actions = new Gson().fromJson(json1, ActionsList.class);
+
+        return actions.items.stream()
+                .map(action -> action.room)
+                .filter(room -> room !=null)
+                .distinct()
+                .sorted()
+                .collect(Collectors.joining(","));
+
+        // TODO 5.1: Vrať výpis učeben, které katedra v daném roce využila (seřadit abecedně, oddělit čárkou)
     }
 }
